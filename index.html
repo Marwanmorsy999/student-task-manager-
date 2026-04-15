@@ -66,11 +66,37 @@
  
     function addTask() {
       const title = document.getElementById('title').value.trim();
-      if (!title) return alert('Enter a task title!');
-      tasks.push({ id: Date.now(), title, due: document.getElementById('due').value, priority: document.getElementById('priority').value, done: false });
-      document.getElementById('title').value = '';
-      render();
-    }
+      const due = document.getElementById('due').value;
+      const priority = document.getElementById('priority').value;
+
+      if (!title) {
+        alert("Task title is required!");
+        return;
+       }
+
+      if (!due) {
+       alert("Please select a due date!");
+       return;
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      if (due < today) {
+         alert("Due date cannot be in the past!");
+         return;
+       }
+
+      tasks.push({
+        id: Date.now(),
+        title,
+        due,
+        priority,
+        done: false
+   });
+
+  document.getElementById('title').value = '';
+  document.getElementById('due').value = '';
+  render();
+}
  
     function render() {
       document.getElementById('list').innerHTML = tasks.length === 0
