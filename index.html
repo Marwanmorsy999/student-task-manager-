@@ -5,48 +5,64 @@
   <title>Student Task Manager</title>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Poppins:wght@600&display=swap" rel="stylesheet">
   <style>
-    /* PERSON 5 - edit styles here */
-    body { font-family: 'quicksand', 'comfortaa', sans-serif; max-width: 800px; margin: 40px auto; padding:  20px; background: #132410;color: #041106; }
-    nav  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;background:#36662e;padding: 15px 25px;border-radius: 10px;box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    nav a { margin-left: 20px; text-decoration: none; color: #94e685;font-weight: bold; }
-    nav a:hover { text-decoration: underline;color:#3d9d2c; }
-    h1   { font-family: 'poppins',sans-serif;font-size: 29px; margin-bottom: 25px;color:#699b61 ;text-align: center; }
-    /* PERSON 2 - form styles */
-    .form { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 24px; }
-    input, select { padding: 8px; margin: 6px 4px 6px 0; border: 1px solid #ccc; border-radius: 4px; }
-    button.add { background: #5b4ef5; color: #fff; border: none; padding: 9px 20px; border-radius: 4px; cursor: pointer; }
+    /* ── PERSON 5: Edit all styles here ── */
+    body { font-family: 'Quicksand', sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #132410; color: #e0f0dc; }
+    nav  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: #36662e; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+    nav a { margin-left: 20px; text-decoration: none; color: #94e685; font-weight: bold; }
+    nav a:hover { color: #fff; }
+    h1 { font-family: 'Poppins', sans-serif; font-size: 29px; margin-bottom: 10px; color: #94e685; text-align: center; }
+    .form { background: #1e3a19; padding: 20px; border-radius: 10px; margin-bottom: 24px; border: 1px solid #36662e; }
+    .form h2 { color: #94e685; margin-bottom: 14px; font-size: 16px; }
+    input, select { padding: 9px 12px; margin: 6px 4px 6px 0; border: 1px solid #36662e; border-radius: 6px; background: #132410; color: #e0f0dc; font-family: 'Quicksand', sans-serif; font-size: 14px; }
+    input::placeholder { color: #557a4f; }
+    input:focus, select:focus { outline: none; border-color: #94e685; }
+    select option { background: #132410; }
+    button.add { background: #36662e; color: #94e685; border: 1px solid #94e685; padding: 9px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+    button.add:hover { background: #94e685; color: #132410; }
+    /* PERSON 6 - search bar styles */
+    .search-box { margin-bottom: 16px; }
+    .search-box input { width: 100%; padding: 10px 14px; border: 1px solid #36662e; border-radius: 8px; background: #1e3a19; color: #e0f0dc; font-size: 14px; box-sizing: border-box; }
+    .search-box input:focus { border-color: #94e685; outline: none; }
+    .filter-row { display: flex; gap: 10px; margin-top: 8px; }
+    .filter-row select { flex: 1; }
+    /* PERSON 3 - task list styles */
+    .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .list-header h2 { color: #94e685; font-size: 16px; }
+    .task-count { background: #36662e; color: #94e685; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
     /* PERSON 3 + 4 - task card + delete */
-    .card { background: #fff; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
-    .card.done span { text-decoration: line-through; color: #aaa; }
-    .badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
-    .high { background:#fde; color:#c00; } .medium { background:#ffd; color:#960; } .low { background:#dfd; color:#060; }
-    button.del { margin-left: auto; background: none; border: none; color: #aaa; font-size: 18px; cursor: pointer; }
-    button.del:hover { color: red; }
+    .card { background: #1e3a19; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid #36662e; transition: border-color 0.2s; }
+    .card:hover { border-color: #94e685; }
+    .card.done span.title { text-decoration: line-through; color: #557a4f; }
+    input[type="checkbox"] { accent-color: #94e685; width: 16px; height: 16px; cursor: pointer; }
+    span.title { flex: 1; font-size: 14px; }
+    span.due { font-size: 12px; color: #557a4f; margin-right: 6px; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+    .high   { background: #3a1a22; color: #e05c7a; }
+    .medium { background: #2a2a10; color: #d4a84b; }
+    .low    { background: #0f2a1a; color: #4caf82; }
+    button.del { margin-left: auto; background: none; border: none; color: #557a4f; font-size: 18px; cursor: pointer; transition: color 0.2s; }
+    button.del:hover { color: #e05c7a; }
+    .empty { text-align: center; color: #557a4f; padding: 30px; border: 1px dashed #36662e; border-radius: 8px; }
   </style>
 </head>
 <body>
- 
-  <!-- PERSON 1 - edit navbar and heading -->
- <nav>
-  <strong style="font-size:20px; color:#5b4ef5;">TaskFlow</strong>
-  <div>
-    <a href="#">Home</a>
-    <a href="#">My Tasks</a>
-    <a href="#">About</a>
-  </div>
-</nav>
 
-<h1>Student Task Manager</h1>
-<p style="color:#555;">Stay organized and manage your daily tasks بسهولة.</p>
+  <!-- PERSON 1: Edit navbar and heading -->
+  <nav>
+    <strong style="font-size:20px; color:#94e685;">TaskFlow</strong>
+    <div>
+      <a href="#">Home</a>
+      <a href="#">My Tasks</a>
+      <a href="#">About</a>
+    </div>
+  </nav>
+  <h1>Student Task Manager</h1>
+  <p style="text-align:center; color:#557a4f; margin-bottom:24px;">Stay organized and manage your daily tasks.</p>
 
-<div style="background:#fff; padding:15px; border-radius:8px; margin-bottom:20px;">
-  <h3>Welcome 👋</h3>
-  <p style="color:#666;">Add your tasks, set priorities, and track your progress easily.</p>
-</div>
- 
-  <!-- PERSON 2 - edit the form -->
+  <!-- PERSON 2: Edit the add task form -->
   <div class="form">
-    <input id="title" placeholder="Task title" style="width:100%"/>
+    <h2>Add a new task</h2>
+    <input id="title" placeholder="Task title e.g. Math homework chapter 3" style="width:100%"/>
     <br/>
     <input type="date" id="due"/>
     <select id="priority">
@@ -56,65 +72,104 @@
     </select>
     <button class="add" onclick="addTask()">+ Add Task</button>
   </div>
- 
-  <!-- PERSON 3 - edit the task list -->
-  <div id="list"><p style="color:#aaa">No tasks yet.</p></div>
- 
+
+  <!-- PERSON 6: Edit the search and filter bar -->
+  <div class="search-box">
+    <input id="search" placeholder="Search tasks by title..." oninput="filterTasks()"/>
+    <div class="filter-row">
+      <select id="filter-priority" onchange="filterTasks()">
+        <option value="all">All priorities</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+      <select id="filter-status" onchange="filterTasks()">
+        <option value="all">All tasks</option>
+        <option value="done">Completed</option>
+        <option value="pending">Pending</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- PERSON 3: Edit the task list display -->
+  <div class="list-header">
+    <h2>Your Tasks</h2>
+    <span class="task-count" id="task-count">0 tasks</span>
+  </div>
+  <div id="list"><div class="empty">Loading tasks...</div></div>
+
   <script>
-    // PERSON 4 - edit the logic below
-    let tasks = [];
- 
-    function addTask() {
-      const title = document.getElementById('title').value.trim();
-      const due = document.getElementById('due').value;
+    // PERSON 4: Edit the API logic and task functions
+    const API = 'http://localhost:3000/api/tasks';
+    let allTasks = [];
+
+    async function loadTasks() {
+      const res = await fetch(API);
+      allTasks = await res.json();
+      filterTasks();
+    }
+
+    async function addTask() {
+      const title    = document.getElementById('title').value.trim();
+      const due      = document.getElementById('due').value;
       const priority = document.getElementById('priority').value;
-
-      if (!title) {
-        alert("Task title is required!");
-        return;
-       }
-
-      if (!due) {
-       alert("Please select a due date!");
-       return;
-      }
-
+      if (!title) return alert('Please enter a task title!');
+      if (!due)   return alert('Please select a due date!');
       const today = new Date().toISOString().split('T')[0];
-      if (due < today) {
-         alert("Due date cannot be in the past!");
-         return;
-       }
+      if (due < today) return alert('Due date cannot be in the past!');
+      await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, due, priority })
+      });
+      document.getElementById('title').value = '';
+      document.getElementById('due').value = '';
+      loadTasks();
+    }
 
-      tasks.push({
-        id: Date.now(),
-        title,
-        due,
-        priority,
-        done: false
-   });
+    async function toggle(id) {
+      await fetch(`${API}/${id}`, { method: 'PATCH' });
+      loadTasks();
+    }
 
-  document.getElementById('title').value = '';
-  document.getElementById('due').value = '';
-  render();
-}
- 
-    function render() {
+    async function del(id) {
+      await fetch(`${API}/${id}`, { method: 'DELETE' });
+      loadTasks();
+    }
+
+    // PERSON 6: Edit the search and filter logic
+    function filterTasks() {
+      const search   = document.getElementById('search').value.toLowerCase();
+      const priority = document.getElementById('filter-priority').value;
+      const status   = document.getElementById('filter-status').value;
+      const filtered = allTasks.filter(t => {
+        const matchSearch   = t.title.toLowerCase().includes(search);
+        const matchPriority = priority === 'all' || t.priority === priority;
+        const matchStatus   = status === 'all' ||
+                             (status === 'done' && t.done) ||
+                             (status === 'pending' && !t.done);
+        return matchSearch && matchPriority && matchStatus;
+      });
+      render(filtered);
+    }
+
+    function render(tasks) {
+      document.getElementById('task-count').textContent = tasks.length + (tasks.length === 1 ? ' task' : ' tasks');
       document.getElementById('list').innerHTML = tasks.length === 0
-        ? '<p style="color:#aaa">No tasks yet.</p>'
+        ? '<div class="empty">No tasks found.</div>'
         : tasks.map(t => `
           <div class="card ${t.done ? 'done' : ''}">
             <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggle(${t.id})"/>
-            <span>${t.title} ${t.due ? '— ' + t.due : ''}</span>
+            <span class="title">${t.title}</span>
+            <span class="due">${t.due}</span>
             <span class="badge ${t.priority}">${t.priority}</span>
             <button class="del" onclick="del(${t.id})">✕</button>
           </div>`).join('');
     }
- 
-    function toggle(id) { const t = tasks.find(t => t.id===id); t.done=!t.done; render(); }
-    function del(id)    { tasks = tasks.filter(t => t.id!==id); render(); }
- 
-    document.getElementById('title').addEventListener('keydown', e => e.key==='Enter' && addTask());
+
+    document.getElementById('title').addEventListener('keydown', e => e.key === 'Enter' && addTask());
+    loadTasks();
   </script>
- 
+
 </body>
 </html>
