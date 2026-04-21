@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── LIGHT THEME ── */
+    [data-theme="light"] {
+      --bg:           #f2f2f7;
+      --surface:      #ffffff;
+      --surface-2:    #f9f9fb;
+      --border:       #e5e5ea;
+      --accent:       #7c6af7;
+      --accent-2:     #ede9fe;
+      --accent-3:     #5b4de0;
+      --text:         #1c1c1e;
+      --text-2:       #6e6e73;
+      --text-3:       #aeaeb2;
+      --high:         #ff3b30;
+      --high-bg:      #fff1f0;
+      --med:          #ff9500;
+      --med-bg:       #fff8ee;
+      --low:          #34c759;
+      --low-bg:       #f0faf3;
+      --shadow:       0 2px 8px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-lg:    0 8px 28px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.05);
+      --header-bg:    rgba(242,242,247,0.88);
+      --row-hover:    #f7f7fb;
+      --toggle-bg:    #e5e5ea;
+      --toggle-knob:  #ffffff;
+    }
+
+    /* ── DARK THEME ── */
+    [data-theme="dark"] {
+      --bg:           #0d0f14;
+      --surface:      #161b25;
+      --surface-2:    #1c2232;
+      --border:       rgba(255,255,255,0.07);
+      --accent:       #7c6af7;
+      --accent-2:     rgba(124,106,247,0.18);
+      --accent-3:     #9d8fff;
+      --text:         #e2e4ec;
+      --text-2:       #7a8099;
+      --text-3:       #3e4560;
+      --high:         #f16585;
+      --high-bg:      rgba(241,101,133,0.12);
+      --med:          #f0a832;
+      --med-bg:       rgba(240,168,50,0.12);
+      --low:          #4cc9a0;
+      --low-bg:       rgba(76,201,160,0.12);
+      --shadow:       0 2px 12px rgba(0,0,0,0.3);
+      --shadow-lg:    0 8px 32px rgba(0,0,0,0.4);
+      --header-bg:    rgba(13,15,20,0.9);
+      --row-hover:    #1c2232;
+      --toggle-bg:    #7c6af7;
+      --toggle-knob:  #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 28px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+
+    .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 6px; }
+
+    nav { display: flex; gap: 2px; }
+    nav a {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-2);
+      text-decoration: none;
+      padding: 5px 11px;
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+    nav a:hover { background: var(--accent-2); color: var(--accent); }
+
+    /* ── DARK MODE TOGGLE ── */
+    .theme-toggle {
+      width: 44px; height: 26px;
+      background: var(--toggle-bg);
+      border: none;
+      border-radius: 13px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .theme-toggle::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      background: var(--toggle-knob);
+      border-radius: 50%;
+      top: 3px; left: 3px;
+      transition: transform 0.25s cubic-bezier(.4,0,.2,1), background 0.3s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    }
+
+    [data-theme="dark"] .theme-toggle::after { transform: translateX(18px); }
+
+    .toggle-icons {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6px;
+      font-size: 11px;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── PAGE ── */
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    /* ── SUMMARY TILES ── */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .sum-tile {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 16px 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.3s;
+      cursor: default;
+    }
+
+    .sum-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+    .sum-icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+    }
+
+    [data-theme="light"] .sum-icon.c-purple { background: #ede9fe; }
+    [data-theme="light"] .sum-icon.c-green  { background: #dcfce7; }
+    [data-theme="light"] .sum-icon.c-orange { background: #fff7ed; }
+    [data-theme="light"] .sum-icon.c-red    { background: #ffe4e6; }
+    [data-theme="dark"]  .sum-icon.c-purple { background: rgba(124,106,247,0.15); }
+    [data-theme="dark"]  .sum-icon.c-green  { background: rgba(76,201,160,0.12); }
+    [data-theme="dark"]  .sum-icon.c-orange { background: rgba(240,168,50,0.12); }
+    [data-theme="dark"]  .sum-icon.c-red    { background: rgba(241,101,133,0.12); }
+
+    .sum-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .sum-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-2);
+    }
+
+    /* ── ADD FORM ── */
+    .add-card {
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 10px;
+      transition: background 0.3s, box-shadow 0.2s;
+    }
+
+    .add-card:focus-within {
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.25), var(--shadow);
+    }
+
+    .add-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px 6px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .add-icon {
+      width: 24px; height: 24px;
+      background: var(--accent-2);
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 20px;
+      font-weight: 300;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+      flex-shrink: 0;
+      padding-bottom: 1px;
+    }
+
+    .add-title-row input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      padding: 13px 0;
+    }
+
+    .add-title-row input::placeholder { color: var(--text-3); font-weight: 400; }
+
+    .add-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .meta-ctrl {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 7px 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.3s;
+      appearance: none;
+    }
+
+    .meta-ctrl:focus { outline: none; border-color: var(--accent); }
+    .meta-ctrl option { background: var(--surface); }
+
+    input[type="date"].meta-ctrl::-webkit-calendar-picker-indicator {
+      opacity: 0.4; cursor: pointer;
+    }
+
+    .meta-spacer { flex: 1; }
+
+    .btn-add {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 22px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-add:hover {
+      background: var(--accent-3);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(124,106,247,0.4);
+    }
+
+    .btn-add:active { transform: none; box-shadow: none; }
+
+    /* ── TASK SECTION HEADER ── */
+    .tasks-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 28px 0 12px;
+      padding: 0 2px;
+    }
+
+    .tasks-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.4px;
+    }
+
+    .tasks-count {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-3);
+    }
+
+    /* ── BIG TOOLBAR ── */
+    .big-toolbar {
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      transition: background 0.3s;
+    }
+
+    .search-field {
+      flex: 1;
+      min-width: 160px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 14px;
+      transition: border-color 0.15s, background 0.3s;
+    }
+
+    .search-field:focus-within { border-color: var(--accent); }
+
+    .search-field svg {
+      width: 15px; height: 15px;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+
+    .search-field input {
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      width: 100%;
+    }
+
+    .search-field input::placeholder { color: var(--text-3); font-weight: 400; }
+
+    .toolbar-divider {
+      width: 1px; height: 28px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .filter-select {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.3s;
+      appearance: none;
+    }
+
+    .filter-select:focus { outline: none; border-color: var(--accent); }
+    .filter-select option { background: var(--surface); }
+
+    .seg-ctrl {
+      display: flex;
+      gap: 4px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 3px;
+    }
+
+    .seg-btn {
+      background: none;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-2);
+      padding: 6px 14px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .seg-btn.on {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(124,106,247,0.35);
+    }
+
+    /* ── TASK LIST PANEL ── */
+    .task-panel {
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      transition: background 0.12s;
+      animation: rise 0.22s ease both;
+      cursor: default;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .task-row + .task-row { border-top: 1px solid var(--border); }
+
+    .task-row:hover { background: var(--row-hover); }
+    .task-row:hover .del-btn { opacity: 1; }
+    .task-row.done { opacity: 0.42; }
+    .task-row.done .t-title { text-decoration: line-through; }
+
+    /* Circle checkbox */
+    .cb-wrap {
+      position: relative;
+      width: 24px; height: 24px;
+      flex-shrink: 0;
+    }
+
+    .cb-wrap input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%; height: 100%;
+      z-index: 2;
+    }
+
+    .cb-circle {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--text-3);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s;
+      pointer-events: none;
+    }
+
+    .task-row.high   .cb-circle { border-color: var(--high); }
+    .task-row.medium .cb-circle { border-color: var(--med); }
+    .task-row.low    .cb-circle { border-color: var(--low); }
+
+    .cb-wrap input:checked ~ .cb-circle {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .cb-wrap input:checked ~ .cb-circle::after {
+      content: '';
+      width: 6px; height: 10px;
+      border: 2px solid #fff;
+      border-top: none; border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+      display: block;
+    }
+
+    /* Task body */
+    .t-body { flex: 1; min-width: 0; }
+
+    .t-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .t-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .chip {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.1px;
+    }
+
+    .chip-date           { background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border); }
+    .chip-date.overdue   { background: var(--high-bg);   color: var(--high); }
+    .chip-date.today     { background: var(--accent-2);  color: var(--accent); }
+    .chip-date.tomorrow  { background: var(--med-bg);    color: var(--med); }
+
+    .chip-pri.high   { background: var(--high-bg); color: var(--high); }
+    .chip-pri.medium { background: var(--med-bg);  color: var(--med); }
+    .chip-pri.low    { background: var(--low-bg);  color: var(--low); }
+
+    /* Delete */
+    .del-btn {
+      opacity: 0;
+      background: none;
+      border: none;
+      width: 30px; height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-3);
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .del-btn:hover { background: var(--high-bg); color: var(--high); }
+    .del-btn svg { width: 14px; height: 14px; }
+
+    /* ── EMPTY ── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 0;
+      color: var(--text-3);
+    }
+
+    .empty-icon { font-size: 38px; display: block; margin-bottom: 10px; }
+    .empty-state p { font-size: 15px; font-weight: 600; color: var(--text-2); }
+    .empty-state small { font-size: 13px; color: var(--text-3); display: block; margin-top: 4px; font-weight: 400; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      header { padding: 0 16px; }
+      .page { padding: 24px 14px 60px; }
+      .summary { grid-template-columns: repeat(2, 1fr); }
+      .seg-ctrl { display: none; }
+      .big-toolbar { flex-wrap: wrap; }
+      .toolbar-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <div class="logo-mark">✦</div>
+      TaskFlow
+    </div>
+    <div class="header-right">
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Tasks</a>
+        <a href="#">About</a>
+      </nav>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <div class="toggle-icons"><span>☀️</span><span>🌙</span></div>
+      </button>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- SUMMARY -->
+    <div class="summary">
+      <div class="sum-tile">
+        <div class="sum-icon c-purple">📋</div>
+        <div class="sum-num" id="s-total">0</div>
+        <div class="sum-label">All Tasks</div>
+      </div>
+      <div class="sum-tile">
+        <div class="sum-icon c-green">✅</div>
+        <div class="sum-num" id="s-done">0</div>
+        <div class="sum-label">Completed</div>
+      </div>
+      <div class="sum-tile">
+        <div class="sum-icon c-orange">⏳</div>
+        <div class="sum-num" id="s-pending">0</div>
+        <div class="sum-label">Pending</div>
+      </div>
+      <div class="sum-tile">
+        <div class="sum-icon c-red">🔴</div>
+        <div class="sum-num" id="s-urgent">0</div>
+        <div class="sum-label">Urgent</div>
+      </div>
+    </div>
+
+    <!-- ADD TASK -->
+    <div class="add-card">
+      <div class="add-title-row">
+        <div class="add-icon">+</div>
+        <input id="title" type="text" placeholder="Add a new task…"/>
+      </div>
+      <div class="add-meta-row">
+        <input  id="due"      type="date"   class="meta-ctrl"/>
+        <select id="priority" class="meta-ctrl">
+          <option value="low">🟢 Low</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="high">🔴 High</option>
+        </select>
+        <div class="meta-spacer"></div>
+        <button class="btn-add" onclick="addTask()">Add Task</button>
+      </div>
+    </div>
+
+    <!-- MY TASKS HEADER -->
+    <div class="tasks-header">
+      <span class="tasks-title">My Tasks</span>
+      <span class="tasks-count" id="task-count">0 tasks</span>
+    </div>
+
+    <!-- BIG TOOLBAR -->
+    <div class="big-toolbar">
+      <div class="search-field">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="7" cy="7" r="5"/><path d="M11.5 11.5l2.5 2.5" stroke-linecap="round"/>
+        </svg>
+        <input id="search" type="text" placeholder="Search tasks…" oninput="filterTasks()"/>
+      </div>
+      <div class="toolbar-divider"></div>
+      <select class="filter-select" id="filter-priority" onchange="filterTasks()">
+        <option value="all">All Priorities</option>
+        <option value="high">🔴 High</option>
+        <option value="medium">🟡 Medium</option>
+        <option value="low">🟢 Low</option>
+      </select>
+      <div class="toolbar-divider"></div>
+      <div class="seg-ctrl">
+        <button class="seg-btn on" onclick="setSeg(this,'all')">All</button>
+        <button class="seg-btn"    onclick="setSeg(this,'pending')">Pending</button>
+        <button class="seg-btn"    onclick="setSeg(this,'done')">Done</button>
+      </div>
+    </div>
+
+    <!-- TASK PANEL -->
+    <div class="task-panel" id="task-panel">
+      <div class="empty-state">
+        <span class="empty-icon">🗒️</span>
+        <p>Loading tasks…</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const API = 'http://localhost:3000/api/tasks';
+    let allTasks  = [];
+    let activeSeg = 'all';
+
+    // ── THEME ──
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.dataset.theme === 'light' ? 'dark' : 'light';
+      html.dataset.theme = next;
+      localStorage.setItem('tf-theme', next);
+    }
+
+    (function() {
+      const saved = localStorage.getItem('tf-theme');
+      if (saved) document.documentElement.dataset.theme = saved;
+      else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.dataset.theme = 'dark';
+    })();
+
+    // ── DATA ──
+    async function loadTasks() {
+      try {
+        const res = await fetch(API);
+        allTasks = await res.json();
+        updateStats();
+        filterTasks();
+      } catch {
+        document.getElementById('task-panel').innerHTML =
+          '<div class="empty-state"><span class="empty-icon">⚠️</span><p>Cannot reach server</p><small>Make sure npm start is running</small></div>';
+      }
+    }
+
+    function updateStats() {
+      const done    = allTasks.filter(t => t.done).length;
+      const pending = allTasks.filter(t => !t.done).length;
+      const urgent  = allTasks.filter(t => t.priority === 'high' && !t.done).length;
+      document.getElementById('s-total').textContent   = allTasks.length;
+      document.getElementById('s-done').textContent    = done;
+      document.getElementById('s-pending').textContent = pending;
+      document.getElementById('s-urgent').textContent  = urgent;
+    }
+
+    async function addTask() {
+      const title    = document.getElementById('title').value.trim();
+      const due      = document.getElementById('due').value;
+      const priority = document.getElementById('priority').value;
+      if (!title) return alert('Please enter a task title.');
+      if (!due)   return alert('Please pick a due date.');
+      const today = new Date().toISOString().split('T')[0];
+      if (due < today) return alert('Due date cannot be in the past.');
+      await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, due, priority })
+      });
+      document.getElementById('title').value = '';
+      document.getElementById('due').value   = '';
+      loadTasks();
+    }
+
+    async function toggle(id) {
+      await fetch(`${API}/${id}`, { method: 'PATCH' });
+      loadTasks();
+    }
+
+    async function del(id) {
+      await fetch(`${API}/${id}`, { method: 'DELETE' });
+      loadTasks();
+    }
+
+    function setSeg(el, val) {
+      document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('on'));
+      el.classList.add('on');
+      activeSeg = val;
+      filterTasks();
+    }
+
+    function fmtDue(due) {
+      const today = new Date().toISOString().split('T')[0];
+      const d     = new Date(due + 'T00:00:00');
+      const diff  = Math.round((d - new Date(today + 'T00:00:00')) / 86400000);
+      let label, cls = '';
+      if      (diff === 0)  { label = 'Today';    cls = 'today'; }
+      else if (diff === 1)  { label = 'Tomorrow'; cls = 'tomorrow'; }
+      else if (diff < 0)    { label = 'Overdue';  cls = 'overdue'; }
+      else                  { label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+      return { label, cls };
+    }
+
+    function filterTasks() {
+      const q   = document.getElementById('search').value.toLowerCase();
+      const pri = document.getElementById('filter-priority').value;
+      const out = allTasks.filter(t => {
+        if (q   && !t.title.toLowerCase().includes(q)) return false;
+        if (pri !== 'all' && t.priority !== pri)        return false;
+        if (activeSeg === 'done'    && !t.done)         return false;
+        if (activeSeg === 'pending' &&  t.done)         return false;
+        return true;
+      });
+      render(out);
+    }
+
+    const priLabel = p => p === 'high' ? '🔴 Urgent' : p === 'medium' ? '🟡 Medium' : '🟢 Low';
+
+    function render(tasks) {
+      const n = tasks.length;
+      document.getElementById('task-count').textContent = n + (n === 1 ? ' task' : ' tasks');
+
+      if (!n) {
+        document.getElementById('task-panel').innerHTML =
+          '<div class="empty-state"><span class="empty-icon">✨</span><p>No tasks here</p><small>Add one above to get started</small></div>';
+        return;
+      }
+
+      document.getElementById('task-panel').innerHTML = tasks.map((t, i) => {
+        const { label, cls } = fmtDue(t.due);
+        return `
+        <div class="task-row ${t.priority} ${t.done ? 'done' : ''}" style="animation-delay:${i * 22}ms">
+          <label class="cb-wrap">
+            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggle(${t.id})"/>
+            <div class="cb-circle"></div>
+          </label>
+          <div class="t-body">
+            <div class="t-title">${t.title}</div>
+            <div class="t-chips">
+              <span class="chip chip-date ${cls}">${label}</span>
+              <span class="chip chip-pri ${t.priority}">${priLabel(t.priority)}</span>
+            </div>
+          </div>
+          <button class="del-btn" onclick="del(${t.id})" title="Delete">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M2 3.5h10M5.5 3.5V2.5a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1M5.5 6v4.5M8.5 6v4.5M3 3.5l.7 8a.5.5 0 00.5.5h5.6a.5.5 0 00.5-.5l.7-8"/>
+            </svg>
+          </button>
+        </div>`;
+      }).join('');
+    }
+
+    document.getElementById('title').addEventListener('keydown', e => {
+      if (e.key === 'Enter') addTask();
+    });
+
+    loadTasks();
+  </script>
+
+</body>
+</html>
