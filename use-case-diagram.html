@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Task Manager – Use Case Diagram</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: #0d0f14;
+    color: #e8e4dc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,220,80,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,220,80,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #ffdc50;
+    margin-bottom: 10px;
+    opacity: 0.85;
+  }
+
+  h1 {
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: #f0ece2;
+  }
+
+  h1 span { color: #ffdc50; }
+
+  .subtitle {
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #7a7669;
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── Diagram container ─── */
+  .diagram-wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 960px;
+    background: #13161d;
+    border: 1px solid #2a2d36;
+    border-radius: 16px;
+    padding: 48px 32px;
+    box-shadow: 0 0 80px rgba(255,220,80,0.06), 0 24px 80px rgba(0,0,0,0.5);
+    overflow-x: auto;
+  }
+
+  svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Legend */
+  .legend {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 40px;
+    justify-content: center;
+    margin-top: 36px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #7a7669;
+  }
+
+  .legend-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-rect {
+    width: 14px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .legend-line {
+    width: 28px; height: 2px;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">UML · Use Case Diagram</p>
+  <h1>Student Task <span>Manager</span></h1>
+  <p class="subtitle">System actors, use cases &amp; relationships</p>
+</header>
+
+<div class="diagram-wrap">
+  <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="Syne, sans-serif">
+
+    <!-- ── Defs ── -->
+    <defs>
+      <!-- Arrow marker (association) -->
+      <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#4a5060"/>
+      </marker>
+      <!-- Include arrow (dashed) -->
+      <marker id="arrow-inc" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#ffdc50"/>
+      </marker>
+      <!-- Extend arrow (dashed) -->
+      <marker id="arrow-ext" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#60c8ff"/>
+      </marker>
+
+      <!-- Glow filter -->
+      <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+
+      <!-- Yellow glow -->
+      <filter id="glow-y" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feColorMatrix in="blur" type="matrix"
+          values="1 0.8 0 0 0  0.8 0.6 0 0 0  0 0 0 0 0  0 0 0 0.7 0" result="colored"/>
+        <feMerge><feMergeNode in="colored"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- ══════════════════════════════════════
+         SYSTEM BOUNDARY
+    ══════════════════════════════════════ -->
+    <rect x="200" y="50" width="530" height="530"
+      rx="12" ry="12"
+      fill="none" stroke="#2a2d36" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="465" y="42" text-anchor="middle"
+      font-family="'DM Mono', monospace" font-size="11" fill="#3a3d48"
+      letter-spacing="0.15em">SYSTEM BOUNDARY</text>
+    <text x="465" y="598" text-anchor="middle"
+      font-family="Syne, sans-serif" font-size="13" fill="#4a5060"
+      font-weight="700" letter-spacing="0.05em">Student Task Manager</text>
+
+    <!-- ══════════════════════════════════════
+         USE CASES  (ellipses)
+    ══════════════════════════════════════ -->
+
+    <!-- UC1: View All Tasks -->
+    <ellipse cx="465" cy="120" rx="100" ry="28" fill="#1a1e28" stroke="#2e6fff" stroke-width="1.5"/>
+    <text x="465" y="116" text-anchor="middle" font-size="12" fill="#8ab4ff" font-weight="700">View All Tasks</text>
+    <text x="465" y="130" text-anchor="middle" font-size="10" fill="#5570a0" font-family="'DM Mono',monospace">GET /api/tasks</text>
+
+    <!-- UC2: Add Task -->
+    <ellipse cx="330" cy="220" rx="100" ry="28" fill="#1a1e28" stroke="#ffdc50" stroke-width="1.5" filter="url(#glow-y)"/>
+    <text x="330" y="216" text-anchor="middle" font-size="12" fill="#ffdc50" font-weight="700">Add Task</text>
+    <text x="330" y="230" text-anchor="middle" font-size="10" fill="#9a8840" font-family="'DM Mono',monospace">POST /api/tasks</text>
+
+    <!-- UC3: Toggle Done/Undone -->
+    <ellipse cx="600" cy="220" rx="110" ry="28" fill="#1a1e28" stroke="#ffdc50" stroke-width="1.5" filter="url(#glow-y)"/>
+    <text x="600" y="216" text-anchor="middle" font-size="12" fill="#ffdc50" font-weight="700">Toggle Task Status</text>
+    <text x="600" y="230" text-anchor="middle" font-size="10" fill="#9a8840" font-family="'DM Mono',monospace">PATCH /api/tasks/:id</text>
+
+    <!-- UC4: Delete Task -->
+    <ellipse cx="465" cy="330" rx="100" ry="28" fill="#1a1e28" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="465" y="326" text-anchor="middle" font-size="12" fill="#ff9090" font-weight="700">Delete Task</text>
+    <text x="465" y="340" text-anchor="middle" font-size="10" fill="#9a5050" font-family="'DM Mono',monospace">DELETE /api/tasks/:id</text>
+
+    <!-- UC5: Search & Filter -->
+    <ellipse cx="330" cy="430" rx="110" ry="28" fill="#1a1e28" stroke="#60c8ff" stroke-width="1.5"/>
+    <text x="330" y="426" text-anchor="middle" font-size="12" fill="#80d8ff" font-weight="700">Search &amp; Filter Tasks</text>
+    <text x="330" y="440" text-anchor="middle" font-size="10" fill="#406070" font-family="'DM Mono',monospace">client-side filter</text>
+
+    <!-- UC6: Persist to DB -->
+    <ellipse cx="600" cy="430" rx="110" ry="28" fill="#1a1e28" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="600" y="426" text-anchor="middle" font-size="12" fill="#c4b0ff" font-weight="700">Persist to Database</text>
+    <text x="600" y="440" text-anchor="middle" font-size="10" fill="#6050a0" font-family="'DM Mono',monospace">SQLite · better-sqlite3</text>
+
+    <!-- UC7: Display Navbar/Homepage -->
+    <ellipse cx="465" cy="530" rx="120" ry="28" fill="#1a1e28" stroke="#4ade80" stroke-width="1.5"/>
+    <text x="465" y="526" text-anchor="middle" font-size="12" fill="#86efac" font-weight="700">Display Navbar / Homepage</text>
+    <text x="465" y="540" text-anchor="middle" font-size="10" fill="#306040" font-family="'DM Mono',monospace">static frontend</text>
+
+    <!-- ══════════════════════════════════════
+         ACTORS
+    ══════════════════════════════════════ -->
+
+    <!-- Actor: Student (left) -->
+    <!-- head -->
+    <circle cx="82" cy="260" r="20" fill="none" stroke="#ffdc50" stroke-width="2" filter="url(#glow-y)"/>
+    <!-- body -->
+    <line x1="82" y1="280" x2="82" y2="330" stroke="#ffdc50" stroke-width="2"/>
+    <!-- arms -->
+    <line x1="52" y1="300" x2="112" y2="300" stroke="#ffdc50" stroke-width="2"/>
+    <!-- legs -->
+    <line x1="82" y1="330" x2="52" y2="365" stroke="#ffdc50" stroke-width="2"/>
+    <line x1="82" y1="330" x2="112" y2="365" stroke="#ffdc50" stroke-width="2"/>
+    <text x="82" y="390" text-anchor="middle" font-size="13" fill="#ffdc50" font-weight="700">Student</text>
+    <text x="82" y="404" text-anchor="middle" font-size="10" fill="#9a8840" font-family="'DM Mono',monospace">(primary actor)</text>
+
+    <!-- Actor: Server/API (right) -->
+    <!-- Cylinder icon -->
+    <ellipse cx="820" cy="248" rx="28" ry="9" fill="#1a1e28" stroke="#a78bfa" stroke-width="2"/>
+    <rect x="792" y="248" width="56" height="50" fill="#1a1e28" stroke="#a78bfa" stroke-width="0"/>
+    <line x1="792" y1="248" x2="792" y2="298" stroke="#a78bfa" stroke-width="2"/>
+    <line x1="848" y1="248" x2="848" y2="298" stroke="#a78bfa" stroke-width="2"/>
+    <ellipse cx="820" cy="298" rx="28" ry="9" fill="#1a1e28" stroke="#a78bfa" stroke-width="2"/>
+    <!-- lines on cylinder -->
+    <ellipse cx="820" cy="265" rx="28" ry="9" fill="none" stroke="#a78bfa" stroke-width="1" opacity="0.4"/>
+    <ellipse cx="820" cy="282" rx="28" ry="9" fill="none" stroke="#a78bfa" stroke-width="1" opacity="0.4"/>
+    <text x="820" y="272" text-anchor="middle" font-size="9" fill="#a78bfa" font-family="'DM Mono',monospace">DB</text>
+    <text x="820" y="324" text-anchor="middle" font-size="13" fill="#c4b0ff" font-weight="700">SQLite DB</text>
+    <text x="820" y="338" text-anchor="middle" font-size="10" fill="#6050a0" font-family="'DM Mono',monospace">(secondary actor)</text>
+
+    <!-- ══════════════════════════════════════
+         ASSOCIATIONS  (solid lines, student → use cases)
+    ══════════════════════════════════════ -->
+
+    <!-- Student → View All Tasks -->
+    <line x1="102" y1="254" x2="362" y2="126" stroke="#4a5060" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Student → Add Task -->
+    <line x1="102" y1="270" x2="227" y2="222" stroke="#4a5060" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Student → Toggle Task -->
+    <line x1="104" y1="285" x2="487" y2="222" stroke="#4a5060" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Student → Delete Task -->
+    <line x1="102" y1="300" x2="362" y2="330" stroke="#4a5060" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Student → Search -->
+    <line x1="102" y1="315" x2="218" y2="426" stroke="#4a5060" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Student → Display Navbar -->
+    <line x1="100" y1="330" x2="342" y2="522" stroke="#4a5060" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <!-- DB ← Persist to DB (DB is secondary actor) -->
+    <line x1="713" y1="430" x2="792" y2="280" stroke="#4a5060" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <!-- ══════════════════════════════════════
+         «include» relationships  (dashed yellow)
+    ══════════════════════════════════════ -->
+
+    <!-- Add Task --include--> Persist to DB -->
+    <line x1="416" y1="232" x2="503" y2="418" stroke="#ffdc50" stroke-width="1.5"
+          stroke-dasharray="6 3" marker-end="url(#arrow-inc)" opacity="0.7"/>
+    <text x="450" y="330" font-size="10" fill="#9a8840" font-family="'DM Mono',monospace"
+          transform="rotate(-58, 450, 330)">«include»</text>
+
+    <!-- Toggle --include--> Persist to DB -->
+    <line x1="600" y1="248" x2="600" y2="400" stroke="#ffdc50" stroke-width="1.5"
+          stroke-dasharray="6 3" marker-end="url(#arrow-inc)" opacity="0.7"/>
+    <text x="612" y="330" font-size="10" fill="#9a8840" font-family="'DM Mono',monospace">«include»</text>
+
+    <!-- Delete --include--> Persist to DB -->
+    <line x1="530" y1="342" x2="527" y2="402" stroke="#ffdc50" stroke-width="1.5"
+          stroke-dasharray="6 3" marker-end="url(#arrow-inc)" opacity="0.7"/>
+    <text x="534" y="374" font-size="10" fill="#9a8840" font-family="'DM Mono',monospace">«include»</text>
+
+    <!-- ══════════════════════════════════════
+         «extend» relationships  (dashed blue)
+    ══════════════════════════════════════ -->
+
+    <!-- Search --extend--> View All Tasks -->
+    <path d="M 295 402 Q 260 250 367 140" fill="none"
+          stroke="#60c8ff" stroke-width="1.5" stroke-dasharray="6 3"
+          marker-end="url(#arrow-ext)" opacity="0.7"/>
+    <text x="242" y="272" font-size="10" fill="#406070" font-family="'DM Mono',monospace"
+          transform="rotate(-70, 242, 272)">«extend»</text>
+
+  </svg>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#ffdc50;"></div>
+    Primary Actor (Student)
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#a78bfa;"></div>
+    Secondary Actor (SQLite DB)
+  </div>
+  <div class="legend-item">
+    <div class="legend-line" style="background:#4a5060;"></div>
+    Association
+  </div>
+  <div class="legend-item">
+    <div class="legend-line" style="background:#ffdc50; height:2px; border-top:2px dashed #ffdc50;"></div>
+    «include»
+  </div>
+  <div class="legend-item">
+    <div class="legend-line" style="background:#60c8ff; height:2px; border-top:2px dashed #60c8ff;"></div>
+    «extend»
+  </div>
+  <div class="legend-item">
+    <svg width="24" height="14"><ellipse cx="12" cy="7" rx="10" ry="6" fill="none" stroke="#ffdc50" stroke-width="1.5"/></svg>
+    Use Case
+  </div>
+</div>
+
+</body>
+</html>
