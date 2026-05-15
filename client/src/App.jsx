@@ -9,6 +9,7 @@ import TasksPage from './pages/TasksPage';
 import CalendarPage from './pages/CalendarPage';
 import PomodoroPage from './pages/PomodoroPage';
 import SettingsPage from './pages/SettingsPage';
+import StatsPage from './pages/StatsPage';
 
 function PrivateRoute({ children }) {
   const { user } = useAuth();
@@ -33,6 +34,7 @@ function AppRoutes() {
           <Route path="/tasks"     element={<PrivateRoute><TasksPage /></PrivateRoute>} />
           <Route path="/calendar"  element={<PrivateRoute><CalendarPage /></PrivateRoute>} />
           <Route path="/pomodoro"  element={<PrivateRoute><PomodoroPage /></PrivateRoute>} />
+          <Route path="/stats"     element={<PrivateRoute><StatsPage /></PrivateRoute>} />
           <Route path="/settings"  element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
