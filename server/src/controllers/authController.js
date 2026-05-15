@@ -76,4 +76,44 @@ const getMe = async (req, res) => {
   });
 };
 
-module.exports = { register, login, getMe };
+// @desc  Update user password
+// @route PUT /api/auth/password
+// @access Private
+const updatePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(req.user._id).select('+password');
+    
+    if (!(await user.matchPassword(currentPassword))) {
+      return res.status(401).json({ message: 'Incorrect current password' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc  Delete user account
+// @route DELETE /api/auth/account
+// @access Private
+const deleteAccount = async (req, res, next) => {
+  try {
+    const Task = require('../models/Task');
+    // Delete all tasks associated with the user
+    await Task.deleteMany({ user: req.user._id });
+    
+    // Delete the user
+    await User.findByIdAndDelete(req.user._id);
+
+    res.json({ message: 'Account deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { register, login, getMe, updatePassword, deleteAccount };
