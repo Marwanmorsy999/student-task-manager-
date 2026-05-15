@@ -1,11 +1,36 @@
+# Dependency folders
 node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment variables
 .env
-*.db
+client/.env
+server/.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Local MongoDB and data files
 server/data/
 server/tmp-mongod/
 server/tmp-mongod-db/
 server/tmp-mongod-test/
-dist/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# macOS
 .DS_Store
+
+# Coverage
 coverage/
+
+# Other
 *.log

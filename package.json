@@ -3,6 +3,22 @@
   "version": "1.0.0",
   "description": "Student Task Manager — full-stack app built with React, Node, MongoDB",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Marwanmorsy999/student-task-manager-.git"
+  },
+  "keywords": [
+    "task-manager",
+    "student",
+    "react",
+    "vite",
+    "node",
+    "express",
+    "mongodb",
+    "jwt"
+  ],
+  "author": "Marwan Morsy",
+  "license": "MIT",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "build": "npm run build --prefix client",
