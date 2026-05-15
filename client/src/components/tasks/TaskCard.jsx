@@ -19,24 +19,40 @@ export default function TaskCard({ task, onEdit, onDelete, onStartTimer, onStopT
   // Update current time display for running timer
   useEffect(() => {
     let interval;
+
     if (task.isTimerRunning && task.timerStartedAt) {
-      interval = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - new Date(task.timerStartedAt).getTime()) / 1000);
-        setCurrentTime(task.timeSpent + elapsed);
-      }, 1000);
+      const updateLiveTime = () => {
+        const elapsed = Math.floor(
+          (Date.now() - new Date(task.timerStartedAt).getTime()) / 1000
+        );
+
+        setCurrentTime((task.timeSpent || 0) + elapsed);
+      };
+
+      updateLiveTime();
+      interval = setInterval(updateLiveTime, 1000);
     } else {
-      setCurrentTime(task.timeSpent);
+      setCurrentTime(task.timeSpent || 0);
     }
+
     return () => clearInterval(interval);
   }, [task.isTimerRunning, task.timerStartedAt, task.timeSpent]);
 
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+  const formatTime = (seconds = 0) => {
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    const hours = Math.floor(safeSeconds / 3600);
+    const minutes = Math.floor((safeSeconds % 3600) / 60);
+    const remainingSeconds = safeSeconds % 60;
+
     if (hours > 0) {
-      return `${hours}h ${minutes}m`;
+      return `${hours}h ${minutes}m ${remainingSeconds}s`;
     }
-    return `${minutes}m`;
+
+    if (minutes > 0) {
+      return `${minutes}m ${remainingSeconds}s`;
+    }
+
+    return `${remainingSeconds}s`;
   };
 
   const handleStatusToggle = async () => {
@@ -54,12 +70,19 @@ export default function TaskCard({ task, onEdit, onDelete, onStartTimer, onStopT
 
   const handleDelete = async () => {
     if (!confirm('Delete this task?')) return;
+
     setDeleting(true);
-    try { await onDelete(task._id); } finally { setDeleting(false); }
+
+    try {
+      await onDelete(task._id);
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleSave = async (data) => {
     setSaving(true);
+
     try {
       await onEdit(task._id, data);
       setShowEdit(false);
@@ -97,12 +120,15 @@ export default function TaskCard({ task, onEdit, onDelete, onStartTimer, onStopT
           <p className={`text-sm font-semibold text-[var(--text)] truncate mb-1 ${isDone ? 'line-through' : ''}`}>
             {task.title}
           </p>
+
           <div className="flex items-center gap-1.5 flex-wrap">
             <Badge variant={due.cls || 'default'}>{due.label}</Badge>
             <Badge variant={task.priority}>{pri.label}</Badge>
+
             {task.category && task.category !== 'General' && (
               <Badge variant="accent">{task.category}</Badge>
             )}
+
             {currentTime > 0 && (
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
@@ -142,6 +168,7 @@ export default function TaskCard({ task, onEdit, onDelete, onStartTimer, onStopT
               <path d="M9.5 2.5l2 2M2 10l.5 1.5L4 11l7-7-2-2-7 7z" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
+
           <button
             onClick={handleDelete}
             disabled={deleting}
