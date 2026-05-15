@@ -1,196 +1,166 @@
 # ✦ TaskFlow — Student Task Manager
 
-![CI](https://github.com/your-org/taskflow/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/Marwanmorsy999/student-task-manager-/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
 ![React](https://img.shields.io/badge/react-18-61dafb)
 
-> A full-stack task management application built for students — clean UI, JWT auth, dark mode, and a proper engineering workflow.
+> A polished student task manager built with React, Node.js, Express, MongoDB and JWT authentication.
 
 ---
 
-## 📸 Preview
+## ✨ Project highlights
 
-| Dashboard (Light) | Tasks (Dark) |
-|---|---|
-| ![dashboard](.github/screenshots/dashboard-light.png) | ![tasks](.github/screenshots/tasks-dark.png) |
-
----
-
-## ✨ Features
-
-- 🔐 **JWT Authentication** — register, login, protected routes
-- ✅ **Task Management** — create, edit, delete, mark done
-- 🔍 **Search & Filter** — by title, priority, and status
-- 📊 **Dashboard Stats** — completion rate, overdue count, priority breakdown
-- 🌙 **Dark Mode** — persisted across sessions
-- 📱 **Responsive** — works on mobile, tablet, and desktop
+- 🔐 **JWT authentication** with protected routes
+- ✅ **Task CRUD** with status, priority, and due date support
+- 📊 **Dashboard statistics** for progress tracking
+- 🌙 **Dark mode** and responsive UI
+- ⚡ **Fast development setup** using Vite and Express
+- 🧪 **Server tests** with Jest and Supertest
 
 ---
 
-## 🛠 Tech Stack
+## 🛠 Tech stack
 
-| Layer | Tech |
+| Layer | Technology |
 |---|---|
 | Frontend | React 18, Vite, Tailwind CSS |
 | Backend | Node.js, Express |
-| Database | MongoDB + Mongoose |
-| Auth | JWT (jsonwebtoken + bcryptjs) |
-| Testing | Jest + Supertest |
+| Database | MongoDB with Mongoose |
+| Auth | JWT, bcryptjs |
+| Testing | Jest, Supertest |
 | CI/CD | GitHub Actions |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting started
 
 ### Prerequisites
 - Node.js ≥ 18
-- MongoDB Atlas account (free tier works)
+- MongoDB connection string
 
-### 1. Clone the repo
+### 1. Clone the repository
 ```bash
-git clone https://github.com/your-org/taskflow.git
+git clone https://github.com/Marwanmorsy999/student-task-manager-.git
 cd taskflow
 ```
 
-### 2. Set up environment variables
-```bash
-cp .env.example server/.env
-# Edit server/.env and fill in MONGO_URI and JWT_SECRET
-
-cp .env.example client/.env
-# Edit client/.env — set VITE_API_URL=http://localhost:5000/api
-```
-
-### 3. Install dependencies
+### 2. Install dependencies
 ```bash
 npm run install:all
 ```
 
-### 4. Run in development
+### 3. Configure environment variables
+Copy the example files and update the variables.
+
+```bash
+copy .env.example server\.env
+copy .env.example client\.env
+```
+
+Update `server/.env` with:
+```env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+PORT=5000
+```
+
+Update `client/.env` with:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+### 4. Start development servers
 ```bash
 npm run dev
 ```
+
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:5000/api
 
 ---
 
-## 📁 Project Structure
+## 📁 Repository structure
 
 ```
 taskflow/
-├── client/                    # React + Vite + Tailwind
-│   └── src/
-│       ├── api/               # Axios instance + API helpers
-│       ├── components/
-│       │   ├── ui/            # Button, Input, Badge, Modal
-│       │   ├── layout/        # Navbar
-│       │   └── tasks/         # TaskCard, TaskForm, FilterBar
-│       ├── context/           # AuthContext, ThemeContext
-│       ├── hooks/             # useTasks
-│       ├── pages/             # Login, Register, Dashboard, Tasks
-│       └── utils/             # Date & priority helpers
-│
-├── server/                    # Express + MongoDB
-│   └── src/
-│       ├── controllers/       # authController, taskController
-│       ├── middleware/        # JWT auth, error handler
-│       ├── models/            # User, Task (Mongoose)
-│       ├── routes/            # auth.routes, task.routes
-│       └── config/            # MongoDB connection
-│
-└── .github/
-    ├── workflows/ci.yml       # GitHub Actions
-    ├── ISSUE_TEMPLATE/        # Bug & feature templates
-    └── pull_request_template.md
+├── client/                    # React + Vite frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── api/               # Axios helpers
+│   │   ├── components/        # UI components and task features
+│   │   ├── context/           # Auth and theme providers
+│   │   ├── hooks/             # custom hooks
+│   │   ├── pages/             # app pages
+│   │   └── utils/             # helper functions
+│   ├── package.json
+│   └── vite.config.js
+├── server/                    # Express backend
+│   ├── src/
+│   │   ├── config/            # database connection
+│   │   ├── controllers/       # request handlers
+│   │   ├── middleware/        # auth and error handling
+│   │   ├── models/            # Mongoose schemas
+│   │   └── routes/            # API routes
+│   ├── package.json
+│   └── server.js
+├── .github/                   # GitHub workflows and templates
+├── .gitignore
+├── CONTRIBUTING.md
+├── LICENSE
+└── package.json
 ```
 
 ---
 
-## 🔌 API Reference
+## 🔌 API reference
 
-### Auth
+### Authentication
 | Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | `/api/auth/register` | Create account | — |
-| POST | `/api/auth/login` | Sign in | — |
-| GET | `/api/auth/me` | Get current user | ✅ |
+|---|---|---|---|
+| POST | `/api/auth/register` | Register new user | No |
+| POST | `/api/auth/login` | Login and receive token | No |
+| GET | `/api/auth/me` | Get current user | Yes |
 
-### Tasks
+### Task management
 | Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/tasks` | Get all tasks (filterable) | ✅ |
-| GET | `/api/tasks/stats` | Get dashboard stats | ✅ |
-| POST | `/api/tasks` | Create a task | ✅ |
-| PUT | `/api/tasks/:id` | Update a task | ✅ |
-| DELETE | `/api/tasks/:id` | Delete a task | ✅ |
+|---|---|---|---|
+| GET | `/api/tasks` | List tasks | Yes |
+| GET | `/api/tasks/stats` | Dashboard stats | Yes |
+| POST | `/api/tasks` | Create task | Yes |
+| PUT | `/api/tasks/:id` | Update task | Yes |
+| DELETE | `/api/tasks/:id` | Delete task | Yes |
 
-**Query params for GET /api/tasks:** `?status=pending&priority=high&search=math&sort=-createdAt`
+**Filter and sort query params:** `status`, `priority`, `search`, `sort`
 
 ---
 
-## 🧪 Running Tests
+## 🧪 Tests
 
+Run server tests:
 ```bash
-# Server tests
 cd server && npm test
-
-# With coverage
-cd server && npm test -- --coverage
 ```
 
 ---
 
-## 🌿 Git Workflow
+## 📦 NPM scripts
 
-```
-main          ← stable, production-ready
-develop       ← integration branch
-feature/*     ← individual features (merged into develop via PR)
-```
-
-### Branch naming
-```
-feature/auth-jwt
-feature/task-crud
-feature/dashboard-stats
-feature/ui-darkmode
-fix/task-filter-bug
-```
+| Script | Description |
+|---|---|
+| `npm run dev` | Start frontend and backend together |
+| `npm run build` | Build frontend production bundle |
+| `npm run start` | Start backend server only |
+| `npm run install:all` | Install dependencies for root, client, and server |
+| `npm run test` | Run backend tests |
 
 ---
 
-## 👥 Team
+## 🤝 Contributing
 
-| Member | Role | Branch |
-|--------|------|--------|
-| P1 | Auth Backend | `feature/auth-jwt` |
-| P2 | Dashboard & UI | `feature/dashboard` |
-| P3 | Tasks Frontend | `feature/task-frontend` |
-| P4 | UI Polish & Dark Mode | `feature/ui-polish` |
-| P5 | Tasks Backend | `feature/task-api` |
-| P6 | DevOps & CI/CD | `feature/devops` |
+Contributions are welcome! Open an issue or submit a PR with your feature or bug fix.
 
----
-
-## 📦 Deployment
-
-### Deploy to Render (recommended — free)
-
-**Backend:**
-1. New Web Service → connect your GitHub repo
-2. Root directory: `server`
-3. Build command: `npm install`
-4. Start command: `node server.js`
-5. Add environment variables: `MONGO_URI`, `JWT_SECRET`, `NODE_ENV=production`
-
-**Frontend:**
-1. New Static Site → connect your GitHub repo
-2. Root directory: `client`
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Add `VITE_API_URL=https://your-backend.onrender.com/api`
+For details, see `CONTRIBUTING.md`.
 
 ---
 
