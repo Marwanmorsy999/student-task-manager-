@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Bell, AlertTriangle, CalendarClock, Flame, X } from 'lucide-react';
+import { Bell, AlertTriangle, CalendarClock, Flame, X, Settings, BarChart3, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useTasks } from '../../hooks/useTasks';
@@ -235,18 +235,19 @@ export default function Navbar() {
     navigate('/login');
   };
 
-  const navLink = (to, label) => {
+  const navLink = (to, content, title) => {
     const active = pathname === to;
     return (
       <Link
         to={to}
-        className={`text-sm font-semibold px-3 py-1.5 rounded-lg transition-all duration-150 ${
+        title={title}
+        className={`text-sm font-semibold px-3 py-1.5 rounded-lg transition-all duration-150 flex items-center justify-center ${
           active
             ? 'bg-[var(--accent-2)] text-[var(--accent)]'
             : 'text-[var(--text-2)] hover:bg-[var(--accent-2)] hover:text-[var(--accent)]'
         }`}
       >
-        {label}
+        {content}
       </Link>
     );
   };
@@ -271,8 +272,8 @@ export default function Navbar() {
               {navLink('/tasks', 'Tasks')}
               {navLink('/calendar', 'Calendar')}
               {navLink('/pomodoro', 'Pomodoro')}
-              {navLink('/stats', 'Stats')}
-              {navLink('/settings', 'Settings')}
+              {navLink('/stats', <BarChart3 className="w-4 h-4" />, 'Stats')}
+              {navLink('/settings', <Settings className="w-4 h-4" />, 'Settings')}
             </nav>
           )}
 
@@ -298,9 +299,10 @@ export default function Navbar() {
               </span>
               <button
                 onClick={handleLogout}
-                className="text-xs font-bold text-[var(--text-3)] hover:text-[var(--high)] transition-colors px-2 py-1"
+                className="text-[var(--text-3)] hover:text-[var(--high)] transition-colors px-2 py-1 flex items-center justify-center"
+                title="Logout"
               >
-                Logout
+                <LogOut className="w-4 h-4" />
               </button>
             </div>
           ) : (
