@@ -1,0 +1,11 @@
+node_modules/
+.env
+*.db
+server/data/
+server/tmp-mongod/
+server/tmp-mongod-db/
+server/tmp-mongod-test/
+dist/
+.DS_Store
+coverage/
+*.log
