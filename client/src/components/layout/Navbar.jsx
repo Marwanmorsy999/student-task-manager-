@@ -271,6 +271,7 @@ export default function Navbar() {
               {navLink('/tasks', 'Tasks')}
               {navLink('/calendar', 'Calendar')}
               {navLink('/pomodoro', 'Pomodoro')}
+              {navLink('/stats', 'Stats')}
               {navLink('/settings', 'Settings')}
             </nav>
           )}
