@@ -1,0 +1,19 @@
+{
+  "name": "taskflow",
+  "version": "1.0.0",
+  "description": "Student Task Manager — full-stack app built with React, Node, MongoDB",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix client",
+    "start": "npm run start --prefix server",
+    "install:all": "npm install && npm install --prefix client && npm install --prefix server",
+    "test": "npm test --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "mongodb": "^7.2.0"
+  }
+}

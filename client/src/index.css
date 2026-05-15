@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #f2f2f7;
+    --surface: #ffffff;
+    --surface-2: #f9f9fb;
+    --border: #e5e5ea;
+    --accent: #7c6af7;
+    --accent-2: #ede9fe;
+    --accent-3: #5b4de0;
+    --text: #1c1c1e;
+    --text-2: #6e6e73;
+    --text-3: #aeaeb2;
+    --high: #ff3b30;
+    --high-bg: #fff1f0;
+    --med: #ff9500;
+    --med-bg: #fff8ee;
+    --low: #34c759;
+    --low-bg: #f0faf3;
+  }
+
+  .dark {
+    --bg: #0d0f14;
+    --surface: #161b25;
+    --surface-2: #1c2232;
+    --border: rgba(255, 255, 255, 0.07);
+    --accent: #7c6af7;
+    --accent-2: rgba(124, 106, 247, 0.18);
+    --accent-3: #9d8fff;
+    --text: #e2e4ec;
+    --text-2: #7a8099;
+    --text-3: #3e4560;
+    --high: #f16585;
+    --high-bg: rgba(241, 101, 133, 0.12);
+    --med: #f0a832;
+    --med-bg: rgba(240, 168, 50, 0.12);
+    --low: #4cc9a0;
+    --low-bg: rgba(76, 201, 160, 0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent text-white font-bold rounded-xl px-5 py-2.5 text-sm
+           hover:bg-accent-hover transition-all duration-150
+           hover:-translate-y-px hover:shadow-accent active:translate-y-0;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent border border-[var(--border)] text-[var(--text-2)]
+           font-semibold rounded-xl px-4 py-2 text-sm
+           hover:bg-[var(--accent-2)] hover:text-[var(--accent)] transition-all;
+  }
+
+  .card {
+    @apply bg-[var(--surface)] rounded-2xl shadow-card;
+  }
+
+  .input-base {
+    @apply bg-[var(--surface-2)] border border-[var(--border)] rounded-xl
+           px-4 py-2.5 text-sm font-medium text-[var(--text)]
+           placeholder:text-[var(--text-3)] placeholder:font-normal
+           focus:outline-none focus:border-[var(--accent)]
+           transition-colors duration-150 w-full;
+  }
+}
