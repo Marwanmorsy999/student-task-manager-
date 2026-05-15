@@ -36,28 +36,38 @@ export default function TaskCard({
     let interval;
 
     if (task.isTimerRunning && task.timerStartedAt) {
-      interval = setInterval(() => {
+      const updateLiveTime = () => {
         const elapsed = Math.floor(
           (Date.now() - new Date(task.timerStartedAt).getTime()) / 1000
         );
-        setCurrentTime(task.timeSpent + elapsed);
-      }, 1000);
+
+        setCurrentTime((task.timeSpent || 0) + elapsed);
+      };
+
+      updateLiveTime();
+      interval = setInterval(updateLiveTime, 1000);
     } else {
-      setCurrentTime(task.timeSpent);
+      setCurrentTime(task.timeSpent || 0);
     }
 
     return () => clearInterval(interval);
   }, [task.isTimerRunning, task.timerStartedAt, task.timeSpent]);
 
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+  const formatTime = (seconds = 0) => {
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    const hours = Math.floor(safeSeconds / 3600);
+    const minutes = Math.floor((safeSeconds % 3600) / 60);
+    const remainingSeconds = safeSeconds % 60;
 
     if (hours > 0) {
-      return `${hours}h ${minutes}m`;
+      return `${hours}h ${minutes}m ${remainingSeconds}s`;
     }
 
-    return `${minutes}m`;
+    if (minutes > 0) {
+      return `${minutes}m ${remainingSeconds}s`;
+    }
+
+    return `${remainingSeconds}s`;
   };
 
   const handleStatusToggle = async () => {
