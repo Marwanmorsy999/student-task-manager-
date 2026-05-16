@@ -14,10 +14,27 @@ export default function RegisterPage() {
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
+  const validatePassword = (pass) => {
+    const minLength = pass.length >= 8;
+    const hasDigit = /\d/.test(pass);
+    const hasLower = /[a-z]/.test(pass);
+    const hasUpper = /[A-Z]/.test(pass);
+    const hasSpecial = /[!@#$%^&*]/.test(pass);
+    
+    return { minLength, hasDigit, hasLower, hasUpper, hasSpecial };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (form.password.length < 6) return setError('Password must be at least 6 characters');
+    
+    const v = validatePassword(form.password);
+    if (!v.minLength) return setError('Password must be at least 8 characters');
+    if (!v.hasDigit) return setError('Password must contain at least one digit');
+    if (!v.hasLower) return setError('Password must contain at least one lowercase letter');
+    if (!v.hasUpper) return setError('Password must contain at least one uppercase letter');
+    if (!v.hasSpecial) return setError('Password must contain at least one special character (!@#$%^&*)');
+
     try {
       await register(form);
       navigate('/dashboard');
@@ -26,8 +43,15 @@ export default function RegisterPage() {
     }
   };
 
-  const passwordStrength = form.password.length >= 8 ? 'strong' :
-                          form.password.length >= 6 ? 'medium' : 'weak';
+  const calculateStrength = () => {
+    const v = validatePassword(form.password);
+    const score = Object.values(v).filter(Boolean).length;
+    if (score <= 2) return 'weak';
+    if (score <= 4) return 'medium';
+    return 'strong';
+  };
+
+  const passwordStrength = calculateStrength();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 flex items-center justify-center p-4">
