@@ -30,8 +30,35 @@ export default function SettingsPage() {
       return;
     }
 
-    if (newPassword.length < 6) {
-      setPasswordError('New password must be at least 6 characters');
+    const validatePassword = (pass) => {
+      const minLength = pass.length >= 8;
+      const hasDigit = /\d/.test(pass);
+      const hasLower = /[a-z]/.test(pass);
+      const hasUpper = /[A-Z]/.test(pass);
+      const hasSpecial = /[!@#$%^&*]/.test(pass);
+      
+      return { minLength, hasDigit, hasLower, hasUpper, hasSpecial };
+    };
+
+    const v = validatePassword(newPassword);
+    if (!v.minLength) {
+      setPasswordError('New password must be at least 8 characters');
+      return;
+    }
+    if (!v.hasDigit) {
+      setPasswordError('New password must contain at least one digit');
+      return;
+    }
+    if (!v.hasLower) {
+      setPasswordError('New password must contain at least one lowercase letter');
+      return;
+    }
+    if (!v.hasUpper) {
+      setPasswordError('New password must contain at least one uppercase letter');
+      return;
+    }
+    if (!v.hasSpecial) {
+      setPasswordError('New password must contain at least one special character (!@#$%^&*)');
       return;
     }
 
@@ -111,7 +138,7 @@ export default function SettingsPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="input-base w-full"
                 required
-                minLength={6}
+                minLength={8}
               />
             </div>
 
@@ -125,7 +152,7 @@ export default function SettingsPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="input-base w-full"
                 required
-                minLength={6}
+                minLength={8}
               />
             </div>
 
