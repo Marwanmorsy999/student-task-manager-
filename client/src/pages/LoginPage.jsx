@@ -50,6 +50,7 @@ export default function LoginPage() {
         {/* Login Card */}
         <div className="w-full max-w-md mx-auto">
           <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/20 p-8">
+
             {/* Logo */}
             <div className="text-center mb-8">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl grid place-items-center text-white text-2xl mx-auto mb-4 shadow-lg">
@@ -65,6 +66,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
+
                 {/* Email field */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-gray-600 dark:text-gray-300">
@@ -106,8 +108,21 @@ export default function LoginPage() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      {showPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
                     </button>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                    >
+                      Forgot password?
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -139,6 +154,7 @@ export default function LoginPage() {
                 </Link>
               </p>
             </div>
+
           </div>
         </div>
       </div>
