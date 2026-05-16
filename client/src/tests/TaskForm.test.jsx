@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi, describe, it, expect } from 'vitest';
 import TaskForm from '../components/tasks/TaskForm';
-import { vi } from 'vitest';
 
 describe('TaskForm Component', () => {
   it('renders correctly with default fields', () => {

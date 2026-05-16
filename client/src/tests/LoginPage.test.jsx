@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { vi, describe, it, expect } from 'vitest';
 import LoginPage from '../pages/LoginPage';
 
 // Mock the AuthContext since LoginPage depends on it
