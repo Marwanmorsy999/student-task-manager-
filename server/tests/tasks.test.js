@@ -18,7 +18,7 @@ beforeAll(async () => {
   // Create a user and get token
   const res = await request(app)
     .post('/api/auth/register')
-    .send({ name: 'Test User', email: 'test1@test.com', password: 'password123' });
+    .send({ name: 'Test User', email: 'test1@test.com', password: 'Password@123' });
   
   token = res.body.token;
   userId = res.body._id;

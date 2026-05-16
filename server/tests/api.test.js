@@ -6,21 +6,35 @@ describe('POST /api/auth/register', () => {
   it('returns 400 when name is missing', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ email: 'test@test.com', password: '123456' });
+      .send({ email: 'test@test.com', password: 'Password@123' });
     expect(res.statusCode).toBe(400);
   });
 
   it('returns 400 for invalid email', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ name: 'Test', email: 'not-an-email', password: '123456' });
+      .send({ name: 'Test', email: 'not-an-email', password: 'Password@123' });
     expect(res.statusCode).toBe(400);
   });
 
   it('returns 400 for short password', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ name: 'Test', email: 'test@test.com', password: '123' });
+      .send({ name: 'Test', email: 'test@test.com', password: 'Short1!' });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('returns 400 for password missing uppercase', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({ name: 'Test', email: 'test@test.com', password: 'password123!' });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('returns 400 for password missing special char', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({ name: 'Test', email: 'test@test.com', password: 'Password123' });
     expect(res.statusCode).toBe(400);
   });
 });
@@ -29,7 +43,7 @@ describe('POST /api/auth/login', () => {
   it('returns 400 for invalid email format', async () => {
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ email: 'bad', password: '123456' });
+      .send({ email: 'bad', password: 'Password@123' });
     expect(res.statusCode).toBe(400);
   });
 });
