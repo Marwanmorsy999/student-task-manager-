@@ -7,31 +7,32 @@ This document contains the UML Diagrams for the Student Task Manager system.
 The Use Case Diagram describes the primary actors and their interactions with the system.
 
 ```mermaid
-usecaseDiagram
-    actor Student
+graph LR
+    Student((Student))
     
-    rectangle "TaskFlow System" {
-        usecase "Register Account" as UC1
-        usecase "Login" as UC2
-        usecase "Manage Tasks" as UC3
-        usecase "View Calendar" as UC4
-        usecase "Use Pomodoro Timer" as UC5
-        usecase "View Statistics" as UC6
-        usecase "Create Task" as UC3_1
-        usecase "Edit Task" as UC3_2
-        usecase "Delete Task" as UC3_3
-    }
+    subgraph "TaskFlow System"
+        UC1([Register Account])
+        UC2([Login])
+        UC3([Manage Tasks])
+        UC4([View Calendar])
+        UC5([Use Pomodoro Timer])
+        UC6([View Statistics])
+        
+        UC3_1([Create Task])
+        UC3_2([Edit Task])
+        UC3_3([Delete Task])
+    end
 
-    Student --> UC1
-    Student --> UC2
-    Student --> UC3
-    Student --> UC4
-    Student --> UC5
-    Student --> UC6
+    Student --- UC1
+    Student --- UC2
+    Student --- UC3
+    Student --- UC4
+    Student --- UC5
+    Student --- UC6
     
-    UC3 ..> UC3_1 : <<includes>>
-    UC3 ..> UC3_2 : <<includes>>
-    UC3 ..> UC3_3 : <<includes>>
+    UC3 -.-> UC3_1
+    UC3 -.-> UC3_2
+    UC3 -.-> UC3_3
 ```
 
 ## 2. Class Diagram
