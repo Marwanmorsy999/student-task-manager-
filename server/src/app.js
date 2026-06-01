@@ -8,9 +8,10 @@ const taskRoutes = require('./routes/task.routes');
 
 const app = express();
 
-// ── Middleware ───────────────────────────────────────────────
+// ── Middleware ───────────────────────────────────────────────a
 app.use(cors({
-  origin: '*',
+  origin: ['https://student-task-manager-git-main-marwan-morsy-s-projects.vercel.app', 'http://localhost:5173'],
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
