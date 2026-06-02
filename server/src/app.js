@@ -5,8 +5,7 @@ const { errorHandler, notFound } = require('./middleware/errorHandler');
 
 const authRoutes = require('./routes/auth.routes');
 const taskRoutes = require('./routes/task.routes');
-const connectDB = require('./config/db');
-connectDB();
+
 const app = express();
 
 // ── Middleware ───────────────────────────────────────────────a
